@@ -1,0 +1,8 @@
+export const SET_ALL_MOVIE = 'SET_ALL_MOVIE'
+
+export const SET_ALL_MOVIE_BACKUP = 'SET_ALL_MOVIE_BACKUP'
+
+export const SET_MOVIE_ITEM = 'SET_MOVIE_ITEM'
+
+export const SET_CURRENTINDEX = 'SET_CURRENTINDEX'
+
