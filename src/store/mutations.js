@@ -12,6 +12,9 @@ const mutations = {
     },
     [types.SET_CURRENTINDEX](state,currentIndex){
         state.currentIndex = currentIndex
+    },
+    [types.SET_MANAGESTATUS](state,manageStatus){
+        state.manageStatus = manageStatus
     }
 }
 

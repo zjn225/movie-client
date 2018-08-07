@@ -1,7 +1,6 @@
 <template>
     <div id="main">
       <!-- 顶部菜单 -->
-     <topMenu id="topMenu"></topMenu>
      <!-- 电影列表 -->
     <card ref="movie" :data="allMovie" @goDetail="goMovieDetail"></card>
      <!-- 注意，这个router-view是渲染子路由的. -->
@@ -12,7 +11,6 @@
 <script>
 // 注意，本页面的所有get、set都是基于vuex
 import { getAllMovies } from "api/movie";
-import topMenu from "cpnts/topMenu/topMenu";
 import card from "base/card/card";
 import { getMovieDetail } from "api/movie";
 import { mapMutations, mapGetters } from "vuex";
@@ -23,7 +21,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["allMovie"])
+    ...mapGetters(["allMovie", "manageStatus"])
   },
 
   methods: {
@@ -32,14 +30,21 @@ export default {
         let cur = themes[i];
         // 外国类的显示title，中国类的显示title
         if (cur.pubdate) {
-          if (cur.pubdate[0].country === "中国大陆") {
+          if (
+            cur.pubdate[0].country === "中国大陆" ||
+            cur.pubdate[0].country == null
+          ) {
             cur.rawTitle = cur.rawTitle;
           } else {
             cur.rawTitle = cur.title;
           }
           // 格式化发布时间
           let temp = cur.pubdate[0].date;
-          temp = temp.slice(0, 10);
+          try {
+            temp = temp.slice(0, 10);
+          } catch (e) {
+            return;
+          }
           cur.pubdate = temp;
         }
         // 删除无简介的
@@ -59,11 +64,18 @@ export default {
       this.setCurrenIndex("2");
     },
 
+    checkLoginStatus() {
+      if (sessionStorage.getItem("user") && this.manageStatus === "退出登录") {
+        this.setManageStatus("后台管理");
+      }
+    },
+
     ...mapMutations({
       setMovieItem: "SET_MOVIE_ITEM",
       setAllMovie: "SET_ALL_MOVIE",
       setAllMovieBackUp: "SET_ALL_MOVIE_BACKUP",
-      setCurrenIndex: "SET_CURRENTINDEX"
+      setCurrenIndex: "SET_CURRENTINDEX",
+      setManageStatus: "SET_MANAGESTATUS"
     })
   },
 
@@ -74,10 +86,11 @@ export default {
     this.nomalizeThems(temp);
     this.setAllMovie(temp);
     this.setAllMovieBackUp(temp);
+
+    this.checkLoginStatus();
   },
 
   components: {
-    topMenu,
     card
   }
 };

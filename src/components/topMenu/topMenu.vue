@@ -10,14 +10,14 @@
         </MenuItem>
         <MenuItem id="finalMenu"  name="3">
             <Icon type="ios-people" />
-            后台管理
+            {{manageStatus}}
         </MenuItem>
     </Menu>
  </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   props: {},
   data() {
@@ -26,9 +26,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["movie", "currentIndex"])
+    ...mapGetters(["movie", "currentIndex", "manageStatus"])
   },
   methods: {
+    // 点击首页
     handleMenu(index) {
       if (index === "1") {
         this.$router.push({
@@ -37,22 +38,35 @@ export default {
       } else if (index === "2") {
         return;
       } else if (index === "3") {
-        
+        if (this.manageStatus === "后台管理") {
+          this.$router.push({
+            path: "/login"
+          });
+        } else {
+          sessionStorage.removeItem("user");
+          this.setManageStatus("后台管理");
+          this.$router.push({
+            path: "/home"
+          });
+        }
       }
-    }
+    },
+    ...mapMutations({
+      setManageStatus: "SET_MANAGESTATUS"
+    })
   },
-  mounted() {}
+  mounted() {
+   
+  }
 };
 </script>
 
 <style lang="scss" scoped >
-#main {
-  .showTitle {
-    margin-left: 16vw;
-  }
-  #finalMenu {
-    float: right;
-  }
+.showTitle {
+  margin-left: 16vw;
+}
+#finalMenu {
+  float: right;
 }
 </style>
 

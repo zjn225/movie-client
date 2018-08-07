@@ -104,7 +104,6 @@ export default {
       const HOST = "http://pcisc50gs.bkt.clouddn.com/";
       this.playerOptions.sources = HOST + this.movie.videoKey;
       this.playerOptions.poster = HOST + this.movie.posterKey;
-      console.log(this.playerOptions.poster);
     },
 
     // 获取相关电影
@@ -120,14 +119,16 @@ export default {
             i--;
           }
         }
-        console.log(this.relativeMovies);
       }
     },
 
     // 格式化相关电影
     nomalizeRelativeThems(themes) {
       if (themes.pubdate) {
-        if (themes.pubdate[0].country === "中国大陆") {
+        if (
+          themes.pubdate[0].country === "中国大陆" ||
+          themes.pubdate[0].country == null
+        ) {
           themes.rawTitle = themes.rawTitle;
         } else {
           themes.rawTitle = themes.title;
@@ -136,24 +137,69 @@ export default {
         let temp = themes.pubdate[0].date;
         temp = temp.slice(0, 10);
         themes.pubdate = temp;
+        if (!themes.posterKey) {
+          themes.splice(i, 1);
+          i--; //涉及到长度变化，别用forEach之类的
+        }
       }
     },
 
     toTop() {
-      document.documentElement.scrollTop = document.body.scrollTop = 0;
+      // 由快到慢
+      let scrollToptimer = setInterval(function() {
+        var top = document.body.scrollTop || document.documentElement.scrollTop;
+        var speed = top / 4;
+        if (document.body.scrollTop != 0) {
+          document.body.scrollTop -= speed;
+        } else {
+          document.documentElement.scrollTop -= speed;
+        }
+        if (top == 0) {
+          clearInterval(scrollToptimer);
+        }
+      }, 16.67);
+    },
+
+    // 防抖函数
+    debounce(func, delay, immediate) {
+      var timer = null;
+      return function() {
+        var context = this;
+        var args = arguments;
+        if (timer) clearTimeout(timer);
+        // 立即执行
+        if (immediate) {
+          var doNow = !timer;
+          timer = setTimeout(function() {
+            timer = null;
+          }, delay);
+          if (doNow) {
+            func.apply(context, args);
+          }
+          // 不立即执行
+        } else {
+          timer = setTimeout(function() {
+            func.apply(context, args);
+          }, delay);
+        }
+      };
     },
 
     // 跳转到相关电影
     goRelativeMovie(item) {
-      // 节流函数
-
+      // this.debounce(
+      // () => {
       this.switchSign = true;
-      // this.toTop();
       this.nomalizeRelativeThems(item);
       this.setMovie(item);
+      this.toTop();
       this.$router.push({
         path: `/home/${item.doubanId}`
       });
+      //   },
+      //   80,
+      //   false
+      // );
     },
 
     ...mapMutations({

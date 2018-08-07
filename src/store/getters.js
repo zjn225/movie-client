@@ -5,3 +5,5 @@ export const allMovieBackUp = state => state.allMovieBackUp
 export const movie = state => state.movie
 
 export const currentIndex = state => state.currentIndex
+
+export const manageStatus = state => state.manageStatus

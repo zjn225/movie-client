@@ -12,7 +12,6 @@ export default {
     toTop() {
         // 由快到慢
        let scrollToptimer = setInterval(function() {
-        console.log("定时循环回到顶部");
         var top = document.body.scrollTop || document.documentElement.scrollTop;
         var speed = top / 4;
         if (document.body.scrollTop != 0) {

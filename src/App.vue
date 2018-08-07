@@ -1,13 +1,15 @@
 <template>
   <div id="app">
+    <!-- 顶部菜单 -->
+    <topMenu id="topMenu"></topMenu>
       <!-- 回到顶部 -->
     <goTop v-if="goTopStatus"></goTop>
-    
     <router-view/>
   </div>
 </template>
 
 <script>
+import topMenu from "cpnts/topMenu/topMenu";
 import goTop from "base/goTop/goTop";
 export default {
   name: "App",
@@ -37,6 +39,7 @@ export default {
   },
 
   components: {
+    topMenu,
     goTop
   }
 };
