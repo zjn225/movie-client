@@ -64,18 +64,19 @@ export default {
 
 <style lang="scss" scoped>
 #main {
-  font-size: 16px;
-  line-height: 16px;
   color: #07111b;
   width: 100%;
   height: auto;
-  background: #e3ebec;
+
   .flexWrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     // 卡片整体
     .card {
+      @media only screen and (max-width: 414px) {
+        width: 43vw;
+      }
       width: 22vw;
       box-shadow: #ccc 1px 4px 20px 3px;
       margin: 10px;
@@ -92,6 +93,9 @@ export default {
       }
       // 图片
       img {
+        @media only screen and (max-width: 414px) {
+          width: 43vw;
+        }
         width: 22vw;
         border-radius: 10px 10px 0 0;
       }

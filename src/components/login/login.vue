@@ -25,7 +25,7 @@ export default {
       let res = await loginRequest({ username, password });
       if (res.data.success === true) {
         // 添加sessionStorage
-        this.setManageStatus("退出登录")
+        this.setManageStatus("退出登录");
         sessionStorage.setItem("user", username);
         this.$Message.success("登录成功");
         this.$router.push({
@@ -35,8 +35,8 @@ export default {
         this.$Message.error(res.data.err);
       }
     },
-     ...mapMutations({
-      setManageStatus: "SET_MANAGESTATUS",
+    ...mapMutations({
+      setManageStatus: "SET_MANAGESTATUS"
     })
   },
   mounted() {}
